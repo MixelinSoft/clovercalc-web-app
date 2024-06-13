@@ -1,0 +1,22 @@
+.header {
+  position: fixed;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 36px;
+
+  font-size: 28px;
+  line-height: 0;
+  font-weight: 500;
+
+  color: white;
+  background-color: #464646;
+  padding: 4px 20px;
+}
+
+.icon {
+  margin-right: 10px;
+  font-size: 34px;
+}
