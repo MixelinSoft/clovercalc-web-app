@@ -1,3 +1,17 @@
 .main {
-  padding: 36px 2px 18px 2px;
+  padding: 44px 10px 26px 10px;
+}
+
+.form {
+  max-width: 320px;
+  border-radius: 12px;
+  padding: 18px;
+  -webkit-box-shadow: 0px 0px 29px 0px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 0px 0px 29px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 0px 29px 0px rgba(0, 0, 0, 1);
+}
+
+.actions {
+  margin-top: 24px;
+  text-align: right;
 }
