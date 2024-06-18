@@ -1,28 +1,25 @@
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import styles from './Main.module.css';
+import InputForm from './InputForm';
+import Card from './UI/Card';
+import Result from './Result';
+import { useState } from 'react';
 
 const Main = () => {
+  const [schemeImage, setSchemeImage] = useState(null);
+
+  const testResult = {
+    image: 3,
+  };
+
   return (
     <main className={styles.main}>
-      <Form className={styles.form}>
-        <div className={styles.inputs}>
-          <Form.Text>Кількість пелюсток</Form.Text>
-          <Form.Select>
-            <option value='4' selected>
-              4
-            </option>
-            <option value='3'>3</option>
-          </Form.Select>
-          <Form.Text>Частота</Form.Text>
-          <InputGroup>
-            <Form.Control type='number' />
-            <InputGroup.Text>Мгц</InputGroup.Text>
-          </InputGroup>
-        </div>
-        <div className={styles.actions}>
-          <Button>Розрахувати</Button>
-        </div>
-      </Form>
+      <Card className={styles.mainCard}>
+        <InputForm />
+        <Card>
+          <Result result={testResult} />
+        </Card>
+      </Card>
     </main>
   );
 };

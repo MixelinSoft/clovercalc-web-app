@@ -14,6 +14,8 @@
   color: white;
   background-color: #464646;
   padding: 4px 20px;
+
+  z-index: 100;
 }
 
 .icon {

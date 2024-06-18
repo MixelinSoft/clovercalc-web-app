@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+}
+.formCard {
+  width: 50%;
+}
+.actions {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.imageCard {
+  overflow: hidden;
+  padding: 0;
+  width: 50%;
+}
+
+.image {
+  width: 100%;
+}
