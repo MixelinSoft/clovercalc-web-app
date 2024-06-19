@@ -59,10 +59,10 @@ const calculateCloverAntenna = (
 };
 
 // Пример использования:
-const frequency = 5800; // в МГц
-const petals = 3;
-const wireThickness = 1.5; // в мм
-const attachmentLength = 10; // длина креплений в мм
+const frequency = 960; // в МГц
+const petals = 4;
+const wireThickness = 3; // в мм
+const attachmentLength = 4; // длина креплений в мм
 
 const antennaParams = calculateCloverAntenna(
   frequency,
@@ -71,3 +71,32 @@ const antennaParams = calculateCloverAntenna(
   attachmentLength
 );
 console.log(antennaParams);
+
+/**
+ * при динамическом диаметре
+ *{
+  lengthA: '88.5 мм',
+  lengthB: '81.6 мм',
+  lengthC: '6.0 мм',
+  kreplenia: 4 mm
+  totalWireLengthPerPetal: '143.0 мм' + kreplenia*2,
+  petalOpening: '90°',
+  deltaAngle: '50°'
+}
+
+ * при фиксировнанйо диаметре
+ *Расчётный Диаметр = 2 мм
+ * Фиксированный = 3 мм
+ * {
+ * 
+  lengthA: '88.5 мм' + (расчтный-фиксированный),
+  lengthB: '81.6 мм' + (расчтный-фиксированный),
+  lengthC: '6.0 мм' + (расчтный-фиксированный),
+  
+  kreplenia: 4 mm,
+  totalWireLengthPerPetal: '143.0 мм' + kreplenia*2,
+  petalOpening: '90°',
+  deltaAngle: '50°'
+}
+
+ */
