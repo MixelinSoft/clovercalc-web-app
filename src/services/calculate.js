@@ -1,76 +1,83 @@
-/**
- * Рассчитывает параметры антенны клевер.
- *
- * @param {number} frequency - Частота в МГц.
- * @param {number} petals - Количество лепестков.
- * @param {number} wireThickness - Толщина провода в мм.
- * @param {number} attachmentLength - Длина креплений в мм.
- * @returns {Object} Объект с параметрами антенны.
- */
-const calculateCloverAntenna = (
-  frequency,
-  petals,
-  wireThickness,
-  attachmentLength
+export const solveCloverleaf = (
+  freq,
+  leaf,
+  useCalculatedDiameter = true,
+  wireDiameter = null,
+  useFastening = false,
+  fastening = 0
 ) => {
-  const speedOfLight = 299792.458; // Скорость света в км/с для расчета в МГц и мм
+  const speedOfLight = 299792.458; // Speed of light in km/s
+  const wavelength = speedOfLight / freq;
 
-  if (frequency <= 0) {
-    throw new Error('Invalid frequency');
-  }
+  let alpha = 0;
+  let beta = 0;
+  let a = 0;
+  let b = 0;
+  let c = 0;
+  let d = 0;
+  const calculatedWireDiameter = 0.006504065 * wavelength; // Default calculated wire diameter
 
-  const wavelength = speedOfLight / frequency; // Длина волны в мм
-
-  let a, b, c, delta, petalOpening, totalWireLengthPerPetal, d, h;
-
-  if (petals === 3) {
-    delta = 55;
-    petalOpening = 108;
+  if (leaf === 3) {
+    alpha = 55;
+    beta = 108;
     a = 0.25273484365 * wavelength;
-    b = 0.006504065 * wavelength;
-    c = 0.027954005434 * wavelength;
-    d = c / Math.cos((delta * Math.PI) / 180) - b;
-    h = a / Math.cos(c / a) - c * Math.tan((delta * Math.PI) / 180);
-    totalWireLengthPerPetal = 2 * Math.PI * a * 0.3;
-  } else if (petals === 4) {
-    delta = 50;
-    petalOpening = 90;
+    const r = calculatedWireDiameter;
+    const s = 0.027954005434 * wavelength;
+    d = s / Math.cos((alpha * Math.PI) / 180) - r;
+    b = a / Math.cos(s / a) - s * Math.tan((alpha * Math.PI) / 180);
+    c = 2 * Math.PI * a * 0.3;
+  } else if (leaf === 4) {
+    alpha = 50;
+    beta = 90;
     a = 0.28337 * wavelength;
-    b = 0.006504065 * wavelength;
-    c = 0.01914658 * wavelength;
-    d = c / Math.cos((delta * Math.PI) / 180);
-    h = a / Math.cos(c / a) - c * Math.tan((delta * Math.PI) / 180);
-    totalWireLengthPerPetal = (Math.PI * a) / 2;
-  } else {
-    throw new Error('Invalid number of petals');
+    const r = calculatedWireDiameter;
+    const s = 0.01914658 * wavelength;
+    d = s / Math.cos((alpha * Math.PI) / 180);
+    b = a / Math.cos(s / a) - s * Math.tan((alpha * Math.PI) / 180);
+    c = (Math.PI * a) / 2;
   }
 
-  // Добавляем длину креплений к общей длине провода одного лепестка
-  totalWireLengthPerPetal += attachmentLength;
+  if (useCalculatedDiameter) {
+    if (wireDiameter === null) {
+      wireDiameter = calculatedWireDiameter;
+    }
+    const diameterDifference = wireDiameter - calculatedWireDiameter;
+    a += diameterDifference;
+    b += diameterDifference;
+    c += diameterDifference;
+  } else {
+    wireDiameter = calculatedWireDiameter;
+  }
+
+  let totalLength = a + b + c;
+
+  if (useFastening) {
+    totalLength += fastening * 2;
+  }
 
   return {
-    lengthA: `${a.toFixed(1)} мм`,
-    lengthB: `${h.toFixed(1)} мм`,
-    lengthC: `${c.toFixed(1)} мм`,
-    totalWireLengthPerPetal: `${totalWireLengthPerPetal.toFixed(1)} мм`,
-    petalOpening: `${petalOpening}°`,
-    deltaAngle: `${delta}°`,
+    leafs: leaf,
+    frequency: freq,
+    wavelength: wavelength,
+    dimensions: {
+      a: a,
+      b: b,
+      c: c,
+      d: d,
+    },
+    wireDiameter: wireDiameter,
+    angles: {
+      alpha: alpha,
+      beta: beta,
+    },
+    totalLength: totalLength,
+    fastening: useFastening ? fastening : 0,
   };
 };
 
-// Пример использования:
-const frequency = 960; // в МГц
-const petals = 4;
-const wireThickness = 3; // в мм
-const attachmentLength = 4; // длина креплений в мм
-
-const antennaParams = calculateCloverAntenna(
-  frequency,
-  petals,
-  wireThickness,
-  attachmentLength
-);
-console.log(antennaParams);
+// Пример вызова функции
+const result = solveCloverleaf(145, 3, 0, true, 0.005, false, 1000);
+console.log(result);
 
 /**
  * при динамическом диаметре

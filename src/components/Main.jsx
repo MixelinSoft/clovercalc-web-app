@@ -3,23 +3,40 @@ import styles from './Main.module.css';
 import InputForm from './InputForm';
 import Card from './UI/Card';
 import Result from './Result';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { solveCloverleaf } from '../services/calculate';
 
 const Main = () => {
-  const [schemeImage, setSchemeImage] = useState(null);
+  const [result, setResult] = useState(null);
+  const resultHandler = (result) => {
+    setResult(
+      solveCloverleaf(
+        +result.frequency,
+        +result.leafs,
+        result.useFixedDiametr,
+        +result.fixedDiameter,
+        result.useFastening,
+        result.fastening
+      )
+    );
+    scrollToRef();
+  };
 
-  const testResult = {
-    image: 3,
+  const resultRef = useRef();
+
+  const scrollToRef = () => {
+    resultRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const resetResult = () => {
+    setResult(null);
   };
 
   return (
     <main className={styles.main}>
-      <Card className={styles.mainCard}>
-        <InputForm />
-        <Card>
-          <Result result={testResult} />
-        </Card>
-      </Card>
+      <InputForm onSubmit={resultHandler} onChange={resetResult} />
+
+      <Result result={result} resultRef={resultRef} />
     </main>
   );
 };
