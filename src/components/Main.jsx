@@ -13,7 +13,7 @@ const Main = () => {
       solveCloverleaf(
         +result.frequency,
         +result.leafs,
-        result.useFixedDiametr,
+        result.useFixedDiameter,
         +result.fixedDiameter,
         result.useFastening,
         result.fastening

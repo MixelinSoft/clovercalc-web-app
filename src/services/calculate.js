@@ -1,83 +1,100 @@
-export const solveCloverleaf = (
+export function solveCloverleaf(
   freq,
   leaf,
-  useCalculatedDiameter = true,
-  wireDiameter = null,
-  useFastening = false,
-  fastening = 0
-) => {
-  const speedOfLight = 299792.458; // Speed of light in km/s
-  const wavelength = speedOfLight / freq;
+  useFixedDiameter,
+  fixedDiameter,
+  useFastening,
+  fastening
+) {
+  const solveCloverleaf = (
+    freq,
+    leaf,
+    useFixedDiameter,
+    fixedDiameter,
+    useFastening,
+    fastening
+  ) => {
+    if (freq <= 0) return null;
 
-  let alpha = 0;
-  let beta = 0;
-  let a = 0;
-  let b = 0;
-  let c = 0;
-  let d = 0;
-  const calculatedWireDiameter = 0.006504065 * wavelength; // Default calculated wire diameter
+    const wavelength = 299792.458 / freq;
+    let a = 0,
+      b = 0,
+      c = 0,
+      d = 0,
+      wireDiameter = 0,
+      alpha = 0,
+      beta = 0,
+      totalLength = 0;
 
-  if (leaf === 3) {
-    alpha = 55;
-    beta = 108;
-    a = 0.25273484365 * wavelength;
-    const r = calculatedWireDiameter;
-    const s = 0.027954005434 * wavelength;
-    d = s / Math.cos((alpha * Math.PI) / 180) - r;
-    b = a / Math.cos(s / a) - s * Math.tan((alpha * Math.PI) / 180);
-    c = 2 * Math.PI * a * 0.3;
-  } else if (leaf === 4) {
-    alpha = 50;
-    beta = 90;
-    a = 0.28337 * wavelength;
-    const r = calculatedWireDiameter;
-    const s = 0.01914658 * wavelength;
-    d = s / Math.cos((alpha * Math.PI) / 180);
-    b = a / Math.cos(s / a) - s * Math.tan((alpha * Math.PI) / 180);
-    c = (Math.PI * a) / 2;
-  }
-
-  if (useCalculatedDiameter) {
-    if (wireDiameter === null) {
-      wireDiameter = calculatedWireDiameter;
+    if (leaf === 3) {
+      alpha = 55;
+      beta = 108;
+      a = 0.25273484365 * wavelength;
+      wireDiameter = 0.006504065 * wavelength;
+      d =
+        (0.027954005434 * wavelength) / Math.cos((alpha * Math.PI) / 180) -
+        wireDiameter;
+      b =
+        a / Math.cos((0.027954005434 * wavelength) / a) -
+        0.027954005434 * wavelength * Math.tan((alpha * Math.PI) / 180);
+      c = 2 * Math.PI * a * 0.3;
+    } else if (leaf === 4) {
+      alpha = 50;
+      beta = 90;
+      a = 0.28337 * wavelength;
+      wireDiameter = 0.006504065 * wavelength;
+      d = (0.01914658 * wavelength) / Math.cos((alpha * Math.PI) / 180);
+      b =
+        a / Math.cos((0.01914658 * wavelength) / a) -
+        0.01914658 * wavelength * Math.tan((alpha * Math.PI) / 180);
+      c = (Math.PI * a) / 2;
+    } else {
+      return null;
     }
-    const diameterDifference = wireDiameter - calculatedWireDiameter;
-    a += diameterDifference;
-    b += diameterDifference;
-    c += diameterDifference;
-  } else {
-    wireDiameter = calculatedWireDiameter;
-  }
+    totalLength = a + b + c;
 
-  let totalLength = a + b + c;
+    const calculatedA = useFixedDiameter
+      ? a + (wireDiameter - fixedDiameter)
+      : a;
+    const calculatedB = useFixedDiameter
+      ? b + (wireDiameter - fixedDiameter)
+      : b;
+    const calculatedC = useFixedDiameter
+      ? c + (wireDiameter - fixedDiameter)
+      : c;
+    const calculatedTotalLength = calculatedA + calculatedB + calculatedC;
 
-  if (useFastening) {
-    totalLength += fastening * 2;
-  }
-
-  return {
-    leafs: leaf,
-    frequency: freq,
-    wavelength: wavelength,
-    dimensions: {
-      a: a,
-      b: b,
-      c: c,
-      d: d,
-    },
-    wireDiameter: wireDiameter,
-    angles: {
-      alpha: alpha,
-      beta: beta,
-    },
-    totalLength: totalLength,
-    fastening: useFastening ? fastening : 0,
+    return {
+      leafs: leaf,
+      frequency: freq,
+      wavelength: wavelength,
+      dimensions: {
+        a: calculatedA,
+        b: calculatedB,
+        c: calculatedC,
+        d: d,
+      },
+      wireDiameter: useFixedDiameter ? fixedDiameter : wireDiameter,
+      angles: {
+        alpha: alpha,
+        beta: beta,
+      },
+      totalLength: useFastening
+        ? calculatedTotalLength + fastening * 2
+        : calculatedTotalLength,
+      fastening: useFastening ? `${fastening} мм x 2` : null,
+    };
   };
-};
 
-// Пример вызова функции
-const result = solveCloverleaf(145, 3, 0, true, 0.005, false, 1000);
-console.log(result);
+  return solveCloverleaf(
+    freq,
+    leaf,
+    useFixedDiameter,
+    fixedDiameter,
+    useFastening,
+    fastening
+  );
+}
 
 /**
  * при динамическом диаметре

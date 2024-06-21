@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import styles from './Result.module.css';
 
 import Card from './UI/Card';
+import { round } from '../services/round';
 
 const Result = (props) => {
   const result = props.result;
@@ -11,13 +12,18 @@ const Result = (props) => {
         <Card className={styles.resultCard}>
           <p>Кількість пелюсток антени: {result.leafs}</p>
           <p>Частота: {result.frequency} МГц</p>
-          <p>Довжина хвилі λ: {result.wavelength} мм</p>
-          <p>Розмір a: {result.dimensions.a} мм</p>
-          <p>Розмір b: {result.dimensions.b} мм</p>
-          <p>Розмір c: {result.dimensions.c} мм</p>
-          <p>Діаметр дроту: 0.8 мм</p>
-          <p>Довжина кріпленнь: 4мм</p>
-          <p>Загальна довжина дроту однієї пелюстки: {result.totalLength} мм</p>
+          <p>Довжина хвилі λ: {round(result.wavelength)} мм</p>
+          <p>Розмір a: {round(result.dimensions.a)} мм</p>
+          <p>Розмір b: {round(result.dimensions.b)} мм</p>
+          <p>Розмір c: {round(result.dimensions.c)} мм</p>
+          <p>Розмір d (у місці підключення): {round(result.dimensions.d)} мм</p>
+          <p>Діаметр дроту: {round(result.wireDiameter)} мм</p>
+          <p>
+            Загальна довжина дроту однієї пелюстки: {round(result.totalLength)}{' '}
+            мм
+          </p>
+          {result.fastening && <p>Довжина кріпленнь: {result.fastening}</p>}
+
           <p>
             Розкриття пелюстки (кут між сторонами a і b): {result.angles.beta}°
           </p>
