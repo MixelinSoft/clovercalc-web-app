@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: row;
 }
 .formCard {
   width: 50%;
@@ -17,4 +18,18 @@
 
 .image {
   width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .formCard {
+    width: 99%;
+  }
+  .imageCard {
+    overflow: hidden;
+    width: 99%;
+  }
 }

@@ -7,7 +7,7 @@ const Header = () => {
       <div className={styles.icon}>
         <MdOutlineSettingsInputAntenna />
       </div>
-      <div>CloverCalc</div>
+      <div>CloverCalc - beta</div>
     </header>
   );
 };
