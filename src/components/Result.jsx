@@ -3,6 +3,7 @@ import styles from './Result.module.css';
 
 import Card from './UI/Card';
 import { round } from '../services/round';
+import { formatLength } from '../services/formatLength';
 
 const Result = (props) => {
   const result = props.result;
@@ -19,8 +20,8 @@ const Result = (props) => {
           <p>Розмір d (у місці підключення): {round(result.dimensions.d)} мм</p>
           <p>Діаметр дроту: {round(result.wireDiameter)} мм</p>
           <p>
-            Загальна довжина дроту однієї пелюстки: {round(result.totalLength)}{' '}
-            мм
+            Загальна довжина дроту однієї пелюстки:{' '}
+            {formatLength(round(result.totalLength))}
           </p>
           {result.fastening && <p>Довжина кріпленнь: {result.fastening}</p>}
 

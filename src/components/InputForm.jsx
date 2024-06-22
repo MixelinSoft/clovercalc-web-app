@@ -84,6 +84,7 @@ const InputForm = (props) => {
                 placeholder={formik.values.useFixedDiameter ? 'Діаметр' : ''}
                 value={formik.values.fixedDiameter}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               <InputGroup.Text>мм</InputGroup.Text>
             </InputGroup>
@@ -108,6 +109,7 @@ const InputForm = (props) => {
                 }
                 value={formik.values.fastening}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               <InputGroup.Text>мм</InputGroup.Text>
             </InputGroup>
