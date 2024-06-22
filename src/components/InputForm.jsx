@@ -2,6 +2,8 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import styles from './InputForm.module.css';
 import { useState } from 'react';
 import Card from './UI/Card';
+import { useFormik } from 'formik';
+import { validate } from '../services/validate';
 
 // Import Images
 import leafs3 from '../assets/3leaf.png';
@@ -9,88 +11,103 @@ import leafs4 from '../assets/4leaf.png';
 import { calculateCloverAntenna } from '../services/calculate';
 
 const InputForm = (props) => {
-  const [leafs, setLeafs] = useState(4);
-  const leafsHandler = (e) => {
-    setLeafs(e.target.value);
-  };
-
-  const [frequency, setFrequency] = useState('');
-  const frequencyHandler = (e) => {
-    setFrequency(e.target.value);
-  };
-
-  const [fixedDiametrCheck, setFixedDiametrCheck] = useState(false);
-  const fixedDiametrCheckHandler = (e) => {
-    setFixedDiametrCheck(e.target.checked);
-  };
-
-  const [fixedDiameter, setFixedDiameter] = useState('');
-  const fixedDiameterHandler = (e) => {
-    setFixedDiameter(e.target.value);
-  };
-
-  const [fasteningCheck, setFasteningCheck] = useState(false);
-  const fasteningCheckHandler = (e) => {
-    setFasteningCheck(e.target.checked);
-  };
-
-  const [fastening, setFastening] = useState('');
-  const fasteningHandler = (e) => {
-    setFastening(e.target.value);
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    props.onSubmit({
-      leafs,
-      frequency,
-      useFixedDiameter: fixedDiametrCheck,
-      fixedDiameter,
-      useFastening: fasteningCheck,
-      fastening,
-    });
-  };
+  const formik = useFormik({
+    initialValues: {
+      leafs: '4',
+      frequency: '',
+      fixedDiameter: '',
+      fastening: '',
+      useFixedDiameter: false,
+      fixedDiameter: '',
+      useFastening: false,
+      fastening: '',
+    },
+    validate: validate,
+    onSubmit: (values) => {
+      console.log(values);
+      props.onSubmit({
+        leafs: values.leafs,
+        frequency: values.frequency,
+        useFixedDiameter: values.useFixedDiameter,
+        fixedDiameter: values.fixedDiameter,
+        useFastening: values.useFastening,
+        fastening: values.fastening,
+      });
+    },
+  });
 
   return (
     <Card className={styles.container}>
       <Card className={styles.formCard}>
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={formik.handleSubmit}>
           <div className={styles.inputs}>
-            <Form.Text>Кількість пелюсток</Form.Text>
-            <Form.Select defaultValue={'4'} onChange={leafsHandler}>
+            <Form.Text>Кількість пелюсток:</Form.Text>
+            <Form.Select
+              defaultValue={formik.values.leafs}
+              name='leafs'
+              onChange={formik.handleChange}>
               <option value='4'>4</option>
               <option value='3'>3</option>
             </Form.Select>
-            <Form.Text>Частота</Form.Text>
+            <Form.Text>Частота:</Form.Text>
+            <Form.Text className={styles.errorMessage}>
+              {'   '}
+              {formik.errors.frequency}
+            </Form.Text>
             <InputGroup>
               <Form.Control
-                value={frequency}
-                onChange={frequencyHandler}
+                isInvalid={formik.errors.frequency}
+                value={formik.values.frequency}
+                name='frequency'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 type='number'
               />
               <InputGroup.Text>Мгц</InputGroup.Text>
             </InputGroup>
-            <Form.Text>Фіксований діаметр</Form.Text>
+            <Form.Text>Фіксований діаметр:</Form.Text>
+            <Form.Text className={styles.errorMessage}>
+              {'   '}
+              {formik.errors.fixedDiameter}
+            </Form.Text>
             <InputGroup>
-              <InputGroup.Checkbox onChange={fixedDiametrCheckHandler} />
+              <InputGroup.Checkbox
+                onChange={formik.handleChange}
+                name='useFixedDiameter'
+                checked={formik.values.useFixedDiameter}
+              />
               <Form.Control
-                disabled={!fixedDiametrCheck}
+                isInvalid={formik.errors.fixedDiameter}
+                disabled={!formik.values.useFixedDiameter}
                 type='number'
-                placeholder={fixedDiametrCheck ? 'Діаметр' : ''}
-                value={fixedDiameter}
-                onChange={fixedDiameterHandler}
+                name='fixedDiameter'
+                placeholder={formik.values.useFixedDiameter ? 'Діаметр' : ''}
+                value={formik.values.fixedDiameter}
+                onChange={formik.handleChange}
               />
               <InputGroup.Text>мм</InputGroup.Text>
             </InputGroup>
-            <Form.Text>Врахувати кріплення</Form.Text>
+            <Form.Text>Врахувати кріплення:</Form.Text>
+            <Form.Text className={styles.errorMessage}>
+              {'   '}
+              {formik.errors.fastening}
+            </Form.Text>
             <InputGroup>
-              <InputGroup.Checkbox onChange={fasteningCheckHandler} />
+              <InputGroup.Checkbox
+                onChange={formik.handleChange}
+                name='useFastening'
+                checked={formik.values.useFastening}
+              />
               <Form.Control
-                disabled={!fasteningCheck}
+                isInvalid={formik.errors.fastening}
+                disabled={!formik.values.useFastening}
+                name='fastening'
                 type='number'
-                placeholder={fasteningCheck ? 'Довжина кріпленняя' : ''}
-                value={fastening}
-                onChange={fasteningHandler}
+                placeholder={
+                  formik.values.useFastening ? 'Довжина кріпленняя' : ''
+                }
+                value={formik.values.fastening}
+                onChange={formik.handleChange}
               />
               <InputGroup.Text>мм</InputGroup.Text>
             </InputGroup>
@@ -105,7 +122,7 @@ const InputForm = (props) => {
       <Card className={styles.imageCard}>
         <img
           className={styles.image}
-          src={leafs === '3' ? leafs3 : leafs4}
+          src={formik.values.leafs === '3' ? leafs3 : leafs4}
           alt=''
         />
       </Card>
