@@ -1,16 +1,18 @@
-import { Button, Form, InputGroup } from 'react-bootstrap';
-import styles from './InputForm.module.css';
-import { useState } from 'react';
-import Card from './UI/Card';
+// Import Hooks
 import { useFormik } from 'formik';
+// Import Components
+import { Button, Form, InputGroup } from 'react-bootstrap';
+import Card from './UI/Card';
+// Import Functions
 import { validate } from '../services/validate';
-
+// Import CSS
+import styles from './InputForm.module.css';
 // Import Images
 import leafs3 from '../assets/3leaf.png';
 import leafs4 from '../assets/4leaf.png';
-import { calculateCloverAntenna } from '../services/calculate';
 
 const InputForm = (props) => {
+  // Create Validation State
   const formik = useFormik({
     initialValues: {
       leafs: '4',
@@ -18,13 +20,12 @@ const InputForm = (props) => {
       fixedDiameter: '',
       fastening: '',
       useFixedDiameter: false,
-      fixedDiameter: '',
       useFastening: false,
-      fastening: '',
     },
+    // Add Validate Function
     validate: validate,
+    // Create Submit Handler
     onSubmit: (values) => {
-      console.log(values);
       props.onSubmit({
         leafs: values.leafs,
         frequency: values.frequency,

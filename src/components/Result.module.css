@@ -4,5 +4,9 @@
 
 .actions {
   display: flex;
-  justify-content: space-around;
+}
+
+.actions button {
+  margin-right: 12px;
+  z-index: 0;
 }

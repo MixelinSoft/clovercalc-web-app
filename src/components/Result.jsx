@@ -9,7 +9,7 @@ import { MdContentCopy } from 'react-icons/md';
 
 const Result = (props) => {
   const result = props.result;
-
+  // Create Text To Copy/Share
   const textToShare =
     result &&
     `Створено за допомогою додатку CloverCalc\nhttps://clovercalc.netlify.app/\n\nКількість пелюсток антени: ${
@@ -18,7 +18,9 @@ const Result = (props) => {
       result.wavelength
     )} мм\nРозмір a: ${round(result.dimensions.a)} мм\nРозмір b: ${round(
       result.dimensions.b
-    )} мм\nРозмір c: {round(result.dimensions.c)} мм\nРозмір d (у місці підключення): ${round(
+    )} мм\nРозмір c: ${round(
+      result.dimensions.c
+    )} мм\nРозмір d (у місці підключення): ${round(
       result.dimensions.d
     )} мм\nДіаметр дроту: ${round(
       result.wireDiameter
@@ -30,9 +32,11 @@ const Result = (props) => {
       result.angles.beta
     }°\nКут нахилу пелюстки до горизонту δ: ${result.angles.alpha}°`;
 
+  // Create Copy Function
   const copy = () => {
     navigator.clipboard.writeText(textToShare);
   };
+  // Create Share Function
   const share = () => {
     if (navigator.share) {
       navigator.share({
