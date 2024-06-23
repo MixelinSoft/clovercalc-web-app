@@ -1,3 +1,8 @@
 .resultCard {
   padding: 8px;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+}
